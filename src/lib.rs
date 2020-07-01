@@ -55,6 +55,16 @@ impl Universe {
         Universe { width, height, cells }
     }
 
+    pub fn set_width(&mut self, width: usize) {
+        self.width = width;
+        self.cells = FixedBitSet::with_capacity(self.height * width);
+    }
+
+    pub fn set_height(&mut self, height: usize) {
+        self.height = height;
+        self.cells = FixedBitSet::with_capacity(self.width * height);
+    }
+
     pub fn width(&self) -> usize {
         self.width
     }
@@ -105,5 +115,18 @@ impl Universe {
         }
 
         self.cells = next;
+    }
+}
+
+impl Universe {
+    pub fn get_cells(&self) -> &FixedBitSet {
+        &self.cells
+    }
+
+    pub fn set_cells(&mut self, cells: &[(usize, usize)]) {
+        for (row, col) in cells.iter().cloned() {
+            let idx = self.get_idx(row, col);
+            self.cells.set(idx, true);
+        }
     }
 }
